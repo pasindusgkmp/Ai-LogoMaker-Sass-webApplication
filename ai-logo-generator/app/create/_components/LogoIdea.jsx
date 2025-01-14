@@ -78,13 +78,13 @@ function LogoIdea({ formData }) {
 
   const generateLogoDesignIdeas = () => {
     const PROMPT = Prompt.DESIGN_IDEA_PROMPT
-      .replace('{logoType}', formData?.design?.title || '')
+      .replace('{logoType}', formData?.designs?.title || '')
       .replace('{logoTitle}', formData?.title || '')
       .replace('{logoDesc}', formData?.desc || '')
-      .replace('{logoPrompt}', formData?.design?.prompt || '');
+      .replace('{logoPrompt}', formData?.designs?.prompt || '');
 
     console.log(PROMPT);
-  };
+  }
 
   return (
     <div className="my-10">
