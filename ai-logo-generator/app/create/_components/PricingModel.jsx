@@ -1,11 +1,25 @@
-import React, { useState } from 'react'
+"use client"
+import React, { useEffect } from 'react';
 import HeadingDescription from './HeadingDescription'
 import Lookup from '@/app/_data/Lookup'
 import Image from 'next/image'
 import { Button } from '@/components/ui/button'
+import { SignInButton, useUser } from '@clerk/nextjs'
 
-const PricingModel = ({onHandleInputChange, formData}) => {
-  const [selectedPricing, setSelectedPricing] = useState(formData?.pricing?.title);
+
+
+const PricingModel = ({formData}) => {
+  //const [selectedPricing, setSelectedPricing] = useState(formData?.pricing?.title);
+
+  const {user} = useUser();
+  
+
+  useEffect(() => {
+    if (formData?.title && typeof window !== 'undefined') {
+      localStorage.setItem('formData', JSON.stringify(formData));
+    }
+  }, [formData]);
+  
 
   return (
     <div className='mt-10'>
@@ -19,10 +33,10 @@ const PricingModel = ({onHandleInputChange, formData}) => {
             <div 
               key={index}
               className='flex flex-col items-center p-5 border rounded-2xl'
-              onClick={() => {
-                setSelectedPricing(pricing.title);
-                onHandleInputChange(pricing);
-              }}
+              // onClick={() => {
+              //   setSelectedPricing(pricing.title);
+              //   onHandleInputChange(pricing);
+              // }}
             >
                 <Image 
                     src={pricing.icon} 
@@ -36,7 +50,15 @@ const PricingModel = ({onHandleInputChange, formData}) => {
                         <h2 className='text-lg mt-3' key={idx}>{feature}</h2>
                     ))}
                 </div>
-                <Button className='mt-auto'>{pricing.button}</Button>
+                {user?
+                <Button className='mt-5'>{pricing.button}</Button>
+                :
+               // forceRedirectUrl={'/generate-logo?type='+pricing.title}
+                <SignInButton mode='modal' forceRedirectUrl={'/generate-logo?type='+pricing.title}>
+                    <Button className='mt-5'>{pricing.button}</Button>
+                </SignInButton>
+              }
+                
             </div>
         ))}
       </div>
