@@ -1,6 +1,10 @@
-import React from 'react'
+"use client"
+import React, { useContext } from 'react'
+import { UserDetailContext } from '../_context/UserDetailContext'
 
-function page() {
+function GenerateLogo() {
+  const {userDetail,setUserDetail} = useContext(UserDetailContext);
+  console.log(userDetail);
   return (
     <div>
       generate logo
@@ -8,4 +12,4 @@ function page() {
   )
 }
 
-export default page
+export default GenerateLogo
