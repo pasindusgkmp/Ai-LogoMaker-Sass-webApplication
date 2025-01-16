@@ -38,6 +38,25 @@ const generationConfig = {
     ],
   });
 
+
+  export const AILogoPrompt = model.startChat({
+    generationConfig,
+    history: [
+      {
+        role: "user",
+        parts: [
+          {text: "Generate a text prompt to create Logo for Logo Title/Brand name : cdscs,with description: csdcd, with Color combination of Ocean Blues, also include the undefined and include Modern Mascot Logos design idea and Referring to this Logo Prompt:A vibrant logo featuring a friendly, animated character with a playful expression. The character is dressed in a classic uniform, complete with a distinctive accessory that adds personality. In one hand, they hold a signature item that represents the brand, while the other elements of the design—such as small decorative touches or natural accents—enhance the overall look. The background consists of a bold, circular design with subtle accents to highlight the character. Below, the brand name is displayed in bold, stylized lettering, with a slight curve and complementary decorative lines. The overall style is fun, welcoming, and full of character.  Give me result in JSON portal with prompt field only"},
+        ],
+      },
+      {
+        role: "model",
+        parts: [
+          {text: "```json\n{\n  \"prompt\": \"Create a modern mascot logo for the brand \\\"cdscs\\\" (description: csdcd). Use a color combination of ocean blues. The logo should be a vibrant design featuring a friendly, animated character with a playful expression. This character should be dressed in a classic uniform, with a distinctive accessory that adds to its personality. The character should hold a signature item representing the brand. Consider adding small decorative touches or natural accents to enhance the overall look. The background should be a bold, circular design with subtle accents to highlight the character. The brand name, \\\"cdscs\\\", should be displayed below the mascot in bold, stylized lettering, with a slight curve and complementary decorative lines. The overall style should be fun, welcoming, and full of character, but maintain an undefined aspect that makes the logo unique and memorable.\"\n}\n```\n"},
+        ],
+      },
+    ],
+  });
+
   // const result = await chatSession.sendMessage("INSERT_INPUT_HERE");
   // console.log(result.response.text());
 
