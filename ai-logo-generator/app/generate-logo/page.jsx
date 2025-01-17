@@ -8,6 +8,7 @@ import { useSearchParams } from 'next/navigation';
 import Lookup from '../_data/Lookup';
 import { DownloadIcon, LayoutDashboard, LoaderIcon } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { toast, Toaster } from 'sonner';
 
 
 function GenerateLogo() {
@@ -42,7 +43,12 @@ function GenerateLogo() {
 
 
   const GenerateAILogo=async()=>{
-
+    if(modelType!='Free'&&userDetail?.credits<=0)
+    {
+      console.log('No Credits')
+      toast('Not Enough Credits')
+      return;
+    }
     
 
     setLoading(true);

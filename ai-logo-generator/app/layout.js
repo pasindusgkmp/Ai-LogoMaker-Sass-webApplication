@@ -2,6 +2,7 @@ import { Host_Grotesk } from "next/font/google";
 import "./globals.css";
 import Provider from "./provider";
 import { ClerkProvider } from "@clerk/nextjs";
+import { Toaster } from "@/components/ui/sonner"
 
 const hostGrotesk = Host_Grotesk({
   subsets: ["latin"],
@@ -23,6 +24,7 @@ export default function RootLayout({ children }) {
         <Provider>
           {children}
         </Provider>
+        <Toaster />
       </body>
     </html>
 
