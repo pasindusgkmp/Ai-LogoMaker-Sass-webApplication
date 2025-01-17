@@ -4,6 +4,10 @@ import { UserDetailContext } from '../_context/UserDetailContext'
 import Prompt from '../_data/Prompt';
 import axios from 'axios';
 import Image from 'next/image';
+import { useSearchParams } from 'next/navigation';
+import Lookup from '../_data/Lookup';
+import { DownloadIcon, LayoutDashboard, LoaderIcon } from 'lucide-react';
+import { Button } from '@/components/ui/button';
 
 
 function GenerateLogo() {
@@ -12,6 +16,8 @@ function GenerateLogo() {
   const [formData,setFormData] =useState();
   const [loading,setLoading]=useState(false);
   const [logoImage,setLogoImage] = useState();
+  const searchParams=useSearchParams();
+  const modelType = searchParams.get('type');
 
   useEffect(()=>{
     if(typeof window != undefined && userDetail?.email)
@@ -36,6 +42,9 @@ function GenerateLogo() {
 
 
   const GenerateAILogo=async()=>{
+
+    
+
     setLoading(true);
     const PROMPT= Prompt.LOGO_PROMPT
     .replace('{logoTitle}',formData?.title)
@@ -68,7 +77,9 @@ function GenerateLogo() {
       prompt:PROMPT,
       email:userDetail?.email,
       title:formData.title,
-      desc:formData.desc
+      desc:formData.desc,
+      type:modelType,
+      userCredits:userDetail?.credit
     });
 
     console.log(result?.data);
@@ -83,13 +94,78 @@ function GenerateLogo() {
 
 
   return (
-    <div>
+    <div className='mt-16 flex flex-col items-center justify-center'>
       <h2>{loading&&'Loading..'}</h2>
       {!loading&&<Image src={logoImage} alt="logo" width={200} height={200}/>}
 
+      {/* <h2 className='font-bold text-3xl text-primary'>{Lookup.LoadingWaitTitle}</h2>
+        {loading&& <div className='flex flex-col items-center mt-2'> 
+          
+          <p className='text-x1 text-gray-500'>{Lookup.LoadingWaitDesc}<p/>
+          <LoaderIcon className='animate-spin'/>
+          <Image src={'/loading.gif'} alt="logo" width={200} height={200}/>
+          <h2 className='mt-2 font-medium text-2xl text-gray-500'>Download</h2>
+        </div>}
+
+
+        {logoImage&&<div className='mt-5'>
+          <Image src={logoImage} alt="logo" width={200} height={200} 
+          className='rounded-xl' />
+
+          <div className='mt-4 flex items-center gap-5'>
+            <Button onClick={()=>onDownload()}> <DownloadIcon/> Download </Button> 
+            <Button variant="outline"> <LayoutDashboard/> Dashboard </Button>
+
+          </div>
+          }
+          
+           <div/>} */}
       
     </div>
   )
+
+
+
+  // return (
+  //   <div className="mt-16 flex flex-col items-center justify-center">
+  //     {/* Title */}
+  //     <h2 className="font-bold text-3xl text-primary">{Lookup.LoadingWaitTitle}</h2>
+  
+  //     {/* Loading Section */}
+  //     {loading && (
+  //       <div className="flex flex-col items-center mt-2">
+  //         <p className="text-xl text-gray-500">{Lookup.LoadingWaitDesc}</p>
+  //         <LoaderIcon className="animate-spin" />
+  //         <Image src="/loading.gif" alt="loading" width={200} height={200} />
+  //         <h2 className="mt-2 font-medium text-2xl text-gray-500">Download</h2>
+  //       </div>
+  //     )}
+  
+  //     {/* Logo Section */}
+  //     {logoImage && (
+  //       <div className="mt-5">
+  //         <Image
+  //           src={logoImage}
+  //           alt="logo"
+  //           width={200}
+  //           height={200}
+  //           className="rounded-xl"
+  //         />
+  
+  //         {/* Buttons */}
+  //         <div className="mt-4 flex items-center gap-5">
+  //           <Button onClick={() => onDownload()}>
+  //             <DownloadIcon /> Download
+  //           </Button>
+  //           <Button variant="outline">
+  //             <LayoutDashboard /> Dashboard
+  //           </Button>
+  //         </div>
+  //       </div>
+  //     )}
+  //   </div>
+  // );
+  
 }
 
 export default GenerateLogo
