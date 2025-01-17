@@ -3,12 +3,15 @@ import React, { useContext, useEffect , useState} from 'react'
 import { UserDetailContext } from '../_context/UserDetailContext'
 import Prompt from '../_data/Prompt';
 import axios from 'axios';
+import Image from 'next/image';
 
 
 function GenerateLogo() {
   const {userDetail,setUserDetail} = useContext(UserDetailContext);
 
   const [formData,setFormData] =useState();
+  const [loading,setLoading]=useState(false);
+  const [logoImage,setLogoImage] = useState();
 
   useEffect(()=>{
     if(typeof window != undefined && userDetail?.email)
@@ -33,6 +36,7 @@ function GenerateLogo() {
 
 
   const GenerateAILogo=async()=>{
+    setLoading(true);
     const PROMPT= Prompt.LOGO_PROMPT
     .replace('{logoTitle}',formData?.title)
     .replace('{logoDesc}',formData?.desc)
@@ -61,10 +65,15 @@ function GenerateLogo() {
 
 
     const result = await axios.post('/api/ai-logo-model',{
-      prompt:PROMPT
+      prompt:PROMPT,
+      email:userDetail?.email,
+      title:formData.title,
+      desc:formData.desc
     });
 
     console.log(result?.data);
+    setLogoImage(result.data?.image)
+    setLoading(false);
 
 
 
@@ -75,7 +84,10 @@ function GenerateLogo() {
 
   return (
     <div>
-      generate logo
+      <h2>{loading&&'Loading..'}</h2>
+      {!loading&&<Image src={logoImage} alt="logo" width={200} height={200}/>}
+
+      
     </div>
   )
 }

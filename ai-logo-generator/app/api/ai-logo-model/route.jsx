@@ -55,6 +55,8 @@
 // }
 
 
+//////////////////////////////////////////////////////////////////////////////////////////////
+
 import { AILogoPrompt } from "@/configs/AiModel";
 import { NextResponse } from "next/server";
 import axios from "axios";
@@ -62,7 +64,7 @@ import axios from "axios";
 export async function POST(req) {
     try {
         // Extract prompt from request body
-        const { prompt } = await req.json();
+        const { prompt , email,title,desc} = await req.json();
 
         // Generate AI text prompt for logo
         const AiPromptResult = await AILogoPrompt.sendMessage(prompt);
@@ -78,7 +80,7 @@ export async function POST(req) {
         console.log("Generated AI Prompt:", AIPrompt);
 
         // Generate logo from Hugging Face AI model
-        const response = await axios.post(
+        const response=await axios.post(
             'https://api-inference.huggingface.co/models/strangerzonehf/Flux-Midjourney-Mix2-LoRA',
             { inputs: AIPrompt }, // Ensure proper format based on API docs
             {
@@ -96,6 +98,20 @@ export async function POST(req) {
         const base64ImageWithMime = `data:image/png;base64,${base64Image}`;
 
         console.log("Generated Base64 Image:", base64ImageWithMime);
+
+
+
+
+        //save to firebase database
+        try {
+            await setDoc(doc(db,"users",EmailAddress,"logos",Date.now().toString()),{
+                image:base64ImageWithMime,
+                title:title,
+                desc:desc
+            })
+        } catch (error) {
+            
+        }
 
         // Return the generated logo image
         return NextResponse.json({ image: base64ImageWithMime });
@@ -118,6 +134,4 @@ export async function POST(req) {
         return NextResponse.json({ error: errorMessage }, { status: 500 });
     }
 }
-
-
 
